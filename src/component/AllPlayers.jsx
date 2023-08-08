@@ -3,11 +3,11 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
+import './AllPlayers.css';
 
-
-export default function AllPlayers({setSelectedPlayerId}) {
+export default function AllPlayers({ setSelectedPlayerId }) {
   const [players, setPlayers] = useState([]);
-  
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     async function fetchPlayers() {
@@ -15,11 +15,6 @@ export default function AllPlayers({setSelectedPlayerId}) {
         const response = await fetch("https://fsa-puppy-bowl.herokuapp.com/api/2302-acc-pt-web-pt-d/players");
         const result = await response.json();
 
-        // Log the complete API response and the 'data' property to inspect the data
-        console.log("Complete API response:", result);
-        console.log("Data property:", result.data);
-
-        // Check if the API response has 'data' and 'players' as an array
         if (result.success && result.data && Array.isArray(result.data.players)) {
           setPlayers(result.data.players);
         } else {
@@ -32,27 +27,44 @@ export default function AllPlayers({setSelectedPlayerId}) {
     fetchPlayers();
   }, []);
 
-return (
-    <div>
-      {players.map((player) => {
-        return (
-          <Card key={player.id} style={{ width: "18rem" }}>
+  const filteredPlayers = players.filter(player =>
+    player.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const handleSearchButtonClick = () => {
+    // Perform the search operation here if needed
+    // For now, just filtering the displayed players
+  };
+
+  return (
+    <div className="all-players-container">
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search players"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <Button variant="primary" onClick={handleSearchButtonClick}>
+          Search
+        </Button>
+      </div>
+      <div className="player-cards">
+        {filteredPlayers.map((player) => (
+          <Card key={player.id} className="player-card">
             <Card.Img variant="top" src={player.imageUrl} alt={player.name} />
             <Card.Body>
               <Card.Title>{player.name}</Card.Title>
               <Card.Text>
                 {player.breed}
               </Card.Text>
-              <Button variant="primary" >
-                 <Link to={`/SinglePlayer/${player.id}`}>See details</Link>
-                </Button>
+              <Button variant="primary">
+                <Link to={`/SinglePlayer/${player.id}`} className= "btn btn-primary">See details</Link>
+              </Button>
             </Card.Body>
           </Card>
-        );
-      })}
-
-       
+        ))}
+      </div>
     </div>
   );
 }
-

@@ -9,6 +9,7 @@ import SinglePlayer from "./component/SinglePlayer"
 
 export default function App() {
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
+  
 
   return (
     <div> {/* Move NavBar and MainContainer inside the same div */}

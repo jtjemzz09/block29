@@ -22,36 +22,45 @@ export default function NewPlayerForm() {
 
   // Function to handle form submission
   async function handleSubmit(event) {
-    event.preventDefault();
-    setError(null);
+  event.preventDefault();
+  setError(null);
 
-    try {
-      const response = await fetch(
-        "https://fsa-puppy-bowl.herokuapp.com/api/2302-acc-pt-web-pt-d/players",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ player: newPlayer }),
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || result.error) {
-        console.error("Server error:", result.error);
-        setError(result.message || "Failed to add player. Please try again.");
-        return;
+  try {
+    const response = await fetch(
+      "https://fsa-puppy-bowl.herokuapp.com/api/2302-acc-pt-web-pt-d/players",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPlayer),
       }
+    );
 
-      const playerData = result.data.players[0];
-      setNewPlayerData(playerData);
-    } catch (error) {
-      console.error("Error adding player:", error);
-      setError("An error occurred. Please try again later.");
+    const result = await response.json();
+
+    if (!response.ok || result.error) {
+      console.error("Server error:", result.error);
+      setError(result.message || "Failed to add player. Please try again.");
+      return;
     }
+
+    // Assuming that the API response directly contains the player data
+    const playerData = result.data;
+
+    // Update the newPlayer state with the received player data
+    setNewPlayerData({
+      name: playerData.name,
+      breed: playerData.breed,
+      status: playerData.status,
+      imageUrl: playerData.imageUrl,
+    });
+  } catch (error) {
+    console.error("Error adding player:", error);
+    setError("An error occurred. Please try again later.");
   }
+}
+
 
   return (
     <div>

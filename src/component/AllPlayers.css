@@ -1,0 +1,20 @@
+/* AllPlayers.css */
+
+.all-players-container {
+    padding: 20px;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.player-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.player-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+}

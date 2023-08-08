@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Import other hooks directly
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
+import { deletePlayer } from '../API/index'; // Import the deletePlayer function
 
 export default function SinglePlayer() {
   const { id } = useParams();
   const [player, setPlayer] = useState(null);
-  
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchPlayer() {
@@ -26,20 +25,28 @@ export default function SinglePlayer() {
     fetchPlayer();
   }, [id]);
 
-  console.log(id);
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deletePlayer(id); // Call the deletePlayer function with the player ID
+      navigate(-1); // After successful deletion, navigate back to the previous page
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (!player) {
     return null;
   }
 
-  const handleGoBack = () => {
-    navigate(-1); // Use navigate to go back
-  };
-
   return (
     <div>
       <h3>Player Details</h3>
       <button onClick={handleGoBack}>Go Back</button>
+      <button onClick={handleDelete}>Delete Player</button> {/* Add the delete button */}
       <Card style={{ width: "18rem" }}>
         <Card.Img variant="top" src={player.imageUrl} alt={player.name} />
         <Card.Body>

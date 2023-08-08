@@ -7,10 +7,12 @@ import NewPlayerForm from "./NewPlayerForm"
 import SinglePlayer from "./SinglePlayer"
 
 
+
 export default function Main (){
 
     return(
         <div>
+      
             <Routes>
                 <Route path ="/" element={< Home/>}/>
                 <Route path ="/AllPlayers" element={< AllPlayers/>}/>
